@@ -59,9 +59,9 @@ jobs:
           echo "=================================="
           
           if [ -z "${{ github.event.inputs.test_filter }}" ]; then
-            dotnet test ECommerce.Playwright.slnx --logger:"trx;LogFileName=test_results_run_${i}.trx" --results-directory ./TestResults
+            dotnet test ECommerce.Playwright.slnx --logger:"trx" --results-directory ./TestResults
           else
-            dotnet test ECommerce.Playwright.slnx --filter "${{ github.event.inputs.test_filter }}" --logger:"trx;LogFileName=test_results_run_${i}.trx" --results-directory ./TestResults
+            dotnet test ECommerce.Playwright.slnx --filter "${{ github.event.inputs.test_filter }}" --logger:"trx" --results-directory ./TestResults
           fi
         done
       env:

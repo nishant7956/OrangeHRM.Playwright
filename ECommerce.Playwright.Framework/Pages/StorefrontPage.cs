@@ -23,7 +23,7 @@ public class StorefrontPage : BasePage
     private ILocator AnnouncementBar     => Page.Locator(".announcement-bar");
     private ILocator NavCartIcon         => Page.Locator(".nav-icon-btn[href*='Cart']").First;
     private ILocator NavAdminIcon        => Page.Locator(".nav-icon-btn[title*='Admin']").First;
-    private ILocator NavBadge            => Page.Locator(".nav-badge");
+    private ILocator NavBadge            => Page.Locator(".nav-badge").First;
     private ILocator EmptyStateMessage   => Page.Locator(".bi-bag-heart").Locator("..");
     private ILocator SuccessAlert        => Page.Locator(".alert-success");
 

@@ -14,7 +14,7 @@ public class CartPage : BasePage
     // ── Locators ──────────────────────────────────────────────────────────────
     private ILocator CartItems         => Page.Locator(".cart-item-row");
     private ILocator EmptyBagMsg       => Page.Locator(".bi-bag").Locator("../.."); 
-    private ILocator ContinueShoppingLink => Page.Locator("a[href='/']");
+    private ILocator ContinueShoppingLink => Page.Locator("a[href='/']").Filter(new LocatorFilterOptions { HasText = "Continue Shopping" });
     private ILocator CheckoutButton    => Page.Locator("button[type='submit']").Filter(new LocatorFilterOptions { HasText = "Checkout" });
     private ILocator OrderSummaryTotal => Page.Locator(".fw-bold.fs-5").Last;
     private ILocator FreeShippingAlert => Page.Locator(".alert-info");
