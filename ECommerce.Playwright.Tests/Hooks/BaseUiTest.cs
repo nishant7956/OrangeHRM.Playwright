@@ -38,24 +38,6 @@ public abstract class BaseUiTest
     protected TestSettings Settings => TestSettings.Current;
 
     // ─────────────────────────────────────────────────────────────────────────
-    //  Global Setup / Teardown
-    // ─────────────────────────────────────────────────────────────────────────
-
-    [OneTimeSetUp]
-    public async Task GlobalSetup()
-    {
-        // Initializes the Playwright process and launches the browser (e.g. Chromium).
-        // This is expensive (~50-100ms) so we only do it once per test assembly/process.
-        await BrowserFactory.InitAsync();
-    }
-
-    [OneTimeTearDown]
-    public async Task GlobalTeardown()
-    {
-        await BrowserFactory.DisposeAsync();
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
     //  Per-Test Setup / Teardown
     // ─────────────────────────────────────────────────────────────────────────
 
