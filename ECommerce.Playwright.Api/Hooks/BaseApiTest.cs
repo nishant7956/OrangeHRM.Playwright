@@ -1,5 +1,6 @@
 using NUnit.Framework;
 
+using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
 namespace ECommerce.Playwright.Api.Hooks;

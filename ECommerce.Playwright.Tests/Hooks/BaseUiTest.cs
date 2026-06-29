@@ -4,6 +4,7 @@ using NUnit.Framework.Interfaces;
 using ECommerce.Playwright.Framework.Browser;
 using ECommerce.Playwright.Framework.Config;
 
+using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
 namespace ECommerce.Playwright.Tests.Hooks;

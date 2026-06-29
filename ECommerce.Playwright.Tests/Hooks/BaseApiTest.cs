@@ -2,6 +2,7 @@ using Microsoft.Playwright;
 using NUnit.Framework;
 using ECommerce.Playwright.Framework.Config;
 
+using Allure.NUnit;
 using Allure.NUnit.Attributes;
 
 namespace ECommerce.Playwright.Tests.Hooks;
