@@ -7,6 +7,10 @@ on:
         description: 'Test Filter (e.g., TestCategory=Smoke, or Name=Can_Create_New_Product)'
         required: false
         default: ''
+      repeat_count:
+        description: 'Number of times to run the test (e.g., to check for flakiness)'
+        required: true
+        default: '1'
 
 jobs:
   test:
@@ -47,13 +51,19 @@ jobs:
     - name: Install Playwright Browsers
       run: pwsh ECommerce.Playwright.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps
 
-    - name: Run Playwright Tests (Filtered)
+    - name: Run Playwright Tests (Filtered & Repeated)
       run: |
-        if [ -z "${{ github.event.inputs.test_filter }}" ]; then
-          dotnet test ECommerce.Playwright.slnx --logger:"trx;LogFileName=test_results.trx" --results-directory ./TestResults
-        else
-          dotnet test ECommerce.Playwright.slnx --filter "${{ github.event.inputs.test_filter }}" --logger:"trx;LogFileName=test_results.trx" --results-directory ./TestResults
-        fi
+        for i in $(seq 1 ${{ github.event.inputs.repeat_count }}); do
+          echo "=================================="
+          echo "   Running Test Iteration $i   "
+          echo "=================================="
+          
+          if [ -z "${{ github.event.inputs.test_filter }}" ]; then
+            dotnet test ECommerce.Playwright.slnx --logger:"trx;LogFileName=test_results_run_${i}.trx" --results-directory ./TestResults
+          else
+            dotnet test ECommerce.Playwright.slnx --filter "${{ github.event.inputs.test_filter }}" --logger:"trx;LogFileName=test_results_run_${i}.trx" --results-directory ./TestResults
+          fi
+        done
       env:
         DOTNET_ENVIRONMENT: CI
 
