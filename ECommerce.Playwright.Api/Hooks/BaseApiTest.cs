@@ -1,8 +1,11 @@
 using NUnit.Framework;
 
+using Allure.NUnit.Attributes;
+
 namespace ECommerce.Playwright.Api.Hooks;
 
 [TestFixture]
+[AllureNUnit]
 public abstract class BaseApiTest
 {
     [SetUp]

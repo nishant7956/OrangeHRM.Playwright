@@ -4,6 +4,8 @@ using NUnit.Framework.Interfaces;
 using ECommerce.Playwright.Framework.Browser;
 using ECommerce.Playwright.Framework.Config;
 
+using Allure.NUnit.Attributes;
+
 namespace ECommerce.Playwright.Tests.Hooks;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -22,6 +24,7 @@ namespace ECommerce.Playwright.Tests.Hooks;
 // ─────────────────────────────────────────────────────────────────────────────
 
 [TestFixture]
+[AllureNUnit]
 public abstract class BaseUiTest
 {
     // These are initialized per-test in SetUp.

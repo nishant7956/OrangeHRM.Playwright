@@ -2,9 +2,12 @@ using Microsoft.Playwright;
 using NUnit.Framework;
 using ECommerce.Playwright.Framework.Config;
 
+using Allure.NUnit.Attributes;
+
 namespace ECommerce.Playwright.Tests.Hooks;
 
 [TestFixture]
+[AllureNUnit]
 public abstract class BaseApiTest
 {
     protected IAPIRequestContext Request { get; private set; } = null!;
