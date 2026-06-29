@@ -11,20 +11,27 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+      checks: write
 
     steps:
-    # 1. Get the Web App Code
+    # 1. Get the Playwright Tests Code (Root)
+    - name: Checkout Playwright Tests Code
+      uses: actions/checkout@v4
+
+    # 2. Get the Web App Code
     - name: Checkout Web App Code
       uses: actions/checkout@v4
       with:
         repository: nishant7956/EcommerceWebApp
         path: 'webapp'
 
-    # 2. Build & Run the Web App
+    # 3. Build & Run the Web App
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '10.0.x'
 
     - name: Build and Start Web App
       run: |
@@ -33,28 +40,20 @@ jobs:
         timeout 30 bash -c 'until curl -s http://localhost:5130/ > /dev/null; do sleep 1; done'
       working-directory: ./webapp
 
-    # 3. Get the Playwright Tests Code
-    - name: Checkout Playwright Tests Code
-      uses: actions/checkout@v4
-      with:
-        path: 'tests'
-
     # 4. Install Playwright and Run
     - name: Build Playwright Tests
       run: dotnet build ECommerce.Playwright.slnx
-      working-directory: ./tests
 
     - name: Install Playwright Browsers
-      run: pwsh tests/ECommerce.Playwright.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps
+      run: pwsh ECommerce.Playwright.Tests/bin/Debug/net8.0/playwright.ps1 install --with-deps
 
     - name: Run Playwright Tests (Filtered)
       run: |
         if [ -z "${{ github.event.inputs.test_filter }}" ]; then
-          dotnet test ECommerce.Playwright.slnx --logger:"trx;LogFileName=test_results.trx"
+          dotnet test ECommerce.Playwright.slnx --logger:"trx;LogFileName=test_results.trx" --results-directory ./TestResults
         else
-          dotnet test ECommerce.Playwright.slnx --filter "${{ github.event.inputs.test_filter }}" --logger:"trx;LogFileName=test_results.trx"
+          dotnet test ECommerce.Playwright.slnx --filter "${{ github.event.inputs.test_filter }}" --logger:"trx;LogFileName=test_results.trx" --results-directory ./TestResults
         fi
-      working-directory: ./tests
       env:
         DOTNET_ENVIRONMENT: CI
 
@@ -64,4 +63,13 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: test-results
-        path: ./tests/TestResults/
+        path: ./TestResults/
+
+    - name: Publish Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Playwright Test Results
+        path: "./TestResults/**/*.trx"
+        reporter: dotnet-trx
+        fail-on-error: false
