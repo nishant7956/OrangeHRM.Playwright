@@ -8,9 +8,13 @@ on:
   workflow_dispatch:
     inputs:
       category:
-        description: Test Category to run (e.g. Smoke)
+        description: Category to run (e.g. Smoke). Leave blank to run all.
         required: false
-        default: 'Smoke'
+        default: ''
+      test_name:
+        description: Specific Test Name to run (e.g. Admin_CanLogin_Successfully)
+        required: false
+        default: ''
 
 jobs:
   test:
@@ -61,8 +65,12 @@ jobs:
         shell: pwsh
         run: |
           $filter = ""
-          if ("${{ github.event_name }}" -eq "workflow_dispatch" -and "${{ inputs.category }}" -ne "") {
-            $filter = "--filter Category=${{ inputs.category }}"
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            if ("${{ inputs.test_name }}" -ne "") {
+              $filter = "--filter FullyQualifiedName~${{ inputs.test_name }}"
+            } elseif ("${{ inputs.category }}" -ne "") {
+              $filter = "--filter Category=${{ inputs.category }}"
+            }
           }
 
           # Run the UI tests project
